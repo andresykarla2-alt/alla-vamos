@@ -6,131 +6,175 @@
 <title>Allá vamos ❤️</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
-margin:0;
-min-height:100vh;
-background:linear-gradient(135deg,#fff5f2,#ead5d9);
-font-family:Georgia,serif;
-color:#432733;
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,#fff5f2,#ead5d9);
+  font-family:Georgia,serif;
+  color:#432733;
 }
 
 .card{
-width:90%;
-max-width:430px;
-margin:40px auto;
-background:white;
-padding:30px;
-border-radius:25px;
-box-shadow:0 10px 30px #0002;
-text-align:center;
+  width:90%;
+  max-width:500px;
+  margin:30px auto;
+  background:white;
+  padding:25px;
+  border-radius:25px;
+  box-shadow:0 10px 30px #0002;
+}
+
+.center{
+  text-align:center;
 }
 
 h1{
-font-size:40px;
-font-weight:normal;
-margin:10px 0;
+  font-size:40px;
+  font-weight:normal;
+  text-align:center;
 }
 
 h2{
-font-weight:normal;
+  font-weight:normal;
 }
 
-input{
-width:100%;
-padding:14px;
-margin:8px 0;
-border:1px solid #dcc8cc;
-border-radius:12px;
-font-size:16px;
+input,
+textarea{
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border:1px solid #dcc8cc;
+  border-radius:12px;
+  font-size:16px;
+  font-family:Arial,sans-serif;
+}
+
+textarea{
+  min-height:130px;
+  resize:vertical;
 }
 
 button{
-width:100%;
-padding:14px;
-margin-top:10px;
-border:0;
-border-radius:12px;
-background:#704157;
-color:white;
-font-size:16px;
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:0;
+  border-radius:12px;
+  background:#704157;
+  color:white;
+  font-size:16px;
 }
 
 button:disabled{
-opacity:.6;
+  opacity:.6;
 }
 
 .secondary{
-background:#eadcdf;
-color:#603849;
-}
-
-.danger{
-background:#8b4a55;
-}
-
-.hidden{
-display:none!important;
-}
-
-.heart{
-font-size:50px;
-}
-
-.message{
-margin-top:15px;
-padding:10px;
-border-radius:10px;
-word-break:break-word;
-}
-
-.success{
-background:#e0f0e4;
-color:#28603d;
-}
-
-.error{
-background:#f7dddd;
-color:#8b3030;
-}
-
-.codigo{
-font-size:30px;
-font-family:monospace;
-font-weight:bold;
-letter-spacing:5px;
-background:#f1e1e0;
-padding:15px;
-border-radius:15px;
-margin:20px 0;
-}
-
-.option{
-background:#fff9f7;
-border:1px solid #ead9d6;
-border-radius:18px;
-padding:18px;
-margin:15px 0;
-}
-
-.option h3{
-margin-top:0;
-}
-
-.small{
-font-family:Arial,sans-serif;
-font-size:13px;
-color:#806b73;
-}
-
-#app{
-display:none;
+  background:#eadcdf;
+  color:#603849;
 }
 
 .logout{
-background:#e5d5d3;
-color:#633d4b;
+  background:#e5d5d3;
+  color:#633d4b;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.heart{
+  font-size:50px;
+  text-align:center;
+}
+
+.message{
+  margin-top:15px;
+  padding:10px;
+  border-radius:10px;
+  word-break:break-word;
+}
+
+.success{
+  background:#e0f0e4;
+  color:#28603d;
+}
+
+.error{
+  background:#f7dddd;
+  color:#8b3030;
+}
+
+.codigo{
+  font-size:28px;
+  font-family:monospace;
+  font-weight:bold;
+  letter-spacing:4px;
+  text-align:center;
+  background:#f1e1e0;
+  padding:15px;
+  border-radius:15px;
+  margin:20px 0;
+}
+
+.option{
+  background:#fff9f7;
+  border:1px solid #ead9d6;
+  border-radius:18px;
+  padding:18px;
+  margin:15px 0;
+}
+
+.small{
+  font-family:Arial,sans-serif;
+  font-size:13px;
+  color:#806b73;
+}
+
+.section{
+  margin-top:25px;
+  padding-top:20px;
+  border-top:1px solid #ead9d6;
+}
+
+.post{
+  background:#fff9f7;
+  border:1px solid #ead9d6;
+  border-radius:18px;
+  padding:18px;
+  margin:15px 0;
+}
+
+.post h3{
+  margin-top:0;
+  color:#704157;
+}
+
+.post-body{
+  white-space:pre-wrap;
+  font-family:Arial,sans-serif;
+  line-height:1.5;
+}
+
+.post-info{
+  font-family:Arial,sans-serif;
+  font-size:12px;
+  color:#90747d;
+  margin-top:15px;
+}
+
+.empty{
+  text-align:center;
+  color:#90747d;
+  padding:20px;
+}
+
+#app{
+  display:none;
 }
 </style>
 </head>
@@ -148,7 +192,9 @@ color:#633d4b;
 
 <h1>Allá vamos</h1>
 
-<p>Nuestro pequeño lugar en el mundo</p>
+<p class="center">
+Nuestro pequeño lugar en el mundo
+</p>
 
 
 <div id="login">
@@ -223,11 +269,14 @@ Volver
 
 <h1>Allá vamos</h1>
 
-<p id="bienvenida"></p>
+<p
+id="bienvenida"
+class="center">
+</p>
 
 
 <!-- =========================================
-     CONFIGURAR PAREJA
+     PAREJA
 ========================================= -->
 
 <div id="configuracionPareja">
@@ -280,20 +329,16 @@ Vincularme con mi pareja
 </div>
 
 
-<!-- =========================================
-     ESPACIO YA CREADO
-========================================= -->
-
 <div id="espacioPareja" class="hidden">
 
 <h2>❤️ Nuestro espacio</h2>
 
-<p>
+<p class="center">
 ¡Ya están conectados!
 </p>
 
-<p>
-Este es vuestro código:
+<p class="center">
+Código de pareja:
 </p>
 
 <div
@@ -302,10 +347,53 @@ class="codigo">
 --------
 </div>
 
+</div>
+
+
+
+<!-- =========================================
+     DIARIO
+========================================= -->
+
+<div
+id="diario"
+class="section hidden">
+
+<h2>📖 Nuestro diario</h2>
+
 <p class="small">
-Guarda este código para poder vincular
-el otro teléfono.
+Un lugar para guardar lo que viven juntos.
 </p>
+
+
+<div class="option">
+
+<h3>✍️ Escribir una entrada</h3>
+
+<input
+id="tituloPost"
+placeholder="Título de la entrada">
+
+<textarea
+id="cuerpoPost"
+placeholder="Escribe aquí vuestro recuerdo, pensamiento o historia..."></textarea>
+
+<button id="publicar">
+Publicar en nuestro diario ❤️
+</button>
+
+<div id="postMensaje"></div>
+
+</div>
+
+
+<h2>💕 Recuerdos</h2>
+
+<div id="listaPosts">
+<div class="empty">
+Cargando nuestro diario...
+</div>
+</div>
 
 </div>
 
@@ -369,6 +457,9 @@ document.getElementById("mensaje");
 const parejaMensaje =
 document.getElementById("parejaMensaje");
 
+const postMensaje =
+document.getElementById("postMensaje");
+
 
 /* =========================================
    MOSTRAR REGISTRO
@@ -395,7 +486,7 @@ mensaje.textContent="";
 
 
 /* =========================================
-   VOLVER AL LOGIN
+   VOLVER
 ========================================= */
 
 document
@@ -431,20 +522,17 @@ async()=>{
 const boton =
 document.getElementById("registrar");
 
-
 const nombre =
 document
 .getElementById("nombre")
 .value
 .trim();
 
-
 const email =
 document
 .getElementById("emailRegistro")
 .value
 .trim();
-
 
 const password =
 document
@@ -525,8 +613,7 @@ await abrirAplicacion();
 
 }else{
 
-mensaje.className=
-"success";
+mensaje.className="success";
 
 mensaje.textContent=
 "Cuenta creada. Revisa tu correo para confirmar la cuenta. ❤️";
@@ -537,8 +624,7 @@ mensaje.textContent=
 
 console.error(error);
 
-mensaje.className=
-"error";
+mensaje.className="error";
 
 mensaje.textContent=
 "ERROR DE SUPABASE: "+
@@ -558,7 +644,7 @@ boton.textContent=
 
 
 /* =========================================
-   INICIAR SESIÓN
+   ENTRAR
 ========================================= */
 
 document
@@ -572,7 +658,6 @@ document
 .getElementById("email")
 .value
 .trim();
-
 
 const password =
 document
@@ -633,8 +718,7 @@ await abrirAplicacion();
 
 console.error(error);
 
-mensaje.className=
-"error";
+mensaje.className="error";
 
 mensaje.textContent=
 "ERROR DE SUPABASE: "+
@@ -676,7 +760,7 @@ await comprobarPareja();
 
 
 /* =========================================
-   COMPROBAR SI YA PERTENECE A UNA PAREJA
+   COMPROBAR PAREJA
 ========================================= */
 
 async function comprobarPareja(){
@@ -706,10 +790,6 @@ throw resultado.error;
 }
 
 
-/*
-SI YA PERTENECE A UNA PAREJA
-*/
-
 if(resultado.data){
 
 pareja={
@@ -719,15 +799,12 @@ code:resultado.data.couples.code
 
 mostrarPareja();
 
+await cargarPosts();
+
 return;
 
 }
 
-
-/*
-SI NO PERTENECE A NINGUNA,
-MOSTRAMOS LAS DOS OPCIONES.
-*/
 
 document
 .getElementById("configuracionPareja")
@@ -735,6 +812,10 @@ document
 
 document
 .getElementById("espacioPareja")
+.classList.add("hidden");
+
+document
+.getElementById("diario")
 .classList.add("hidden");
 
 
@@ -754,7 +835,7 @@ error.message;
 
 
 /* =========================================
-   CREAR NUEVO ESPACIO
+   CREAR PAREJA
 ========================================= */
 
 document
@@ -766,14 +847,10 @@ async()=>{
 const boton =
 document.getElementById("crearPareja");
 
-
 boton.disabled=true;
 
 boton.textContent=
 "Creando espacio...";
-
-
-parejaMensaje.className="";
 
 
 try{
@@ -814,6 +891,8 @@ resultado.data[0].invite_code
 
 mostrarPareja();
 
+await cargarPosts();
+
 
 }catch(error){
 
@@ -839,7 +918,7 @@ boton.textContent=
 
 
 /* =========================================
-   VINCULAR A UNA PAREJA EXISTENTE
+   VINCULAR PAREJA
 ========================================= */
 
 document
@@ -850,7 +929,6 @@ async()=>{
 
 const boton =
 document.getElementById("vincular");
-
 
 const codigo =
 document
@@ -927,8 +1005,12 @@ parejaMensaje.textContent=
 
 
 setTimeout(
-()=>{
+async()=>{
+
 mostrarPareja();
+
+await cargarPosts();
+
 },
 700
 );
@@ -967,16 +1049,293 @@ document
 .getElementById("configuracionPareja")
 .classList.add("hidden");
 
-
 document
 .getElementById("espacioPareja")
 .classList.remove("hidden");
 
+document
+.getElementById("diario")
+.classList.remove("hidden");
 
 document
 .getElementById("codigo")
 .textContent =
 pareja.code;
+
+}
+
+
+/* =========================================
+   PUBLICAR EN EL DIARIO
+========================================= */
+
+document
+.getElementById("publicar")
+.addEventListener(
+"click",
+async()=>{
+
+const boton =
+document.getElementById("publicar");
+
+const titulo =
+document
+.getElementById("tituloPost")
+.value
+.trim();
+
+const cuerpo =
+document
+.getElementById("cuerpoPost")
+.value
+.trim();
+
+
+postMensaje.className="";
+
+
+if(!titulo){
+
+postMensaje.className="error";
+
+postMensaje.textContent=
+"Escribe un título.";
+
+return;
+
+}
+
+
+if(!cuerpo){
+
+postMensaje.className="error";
+
+postMensaje.textContent=
+"Escribe algo en el diario.";
+
+return;
+
+}
+
+
+if(!pareja){
+
+postMensaje.className="error";
+
+postMensaje.textContent=
+"Primero debes estar vinculado a una pareja.";
+
+return;
+
+}
+
+
+boton.disabled=true;
+
+boton.textContent=
+"Guardando...";
+
+
+try{
+
+const resultado =
+await supabase
+.from("posts")
+.insert({
+
+couple_id:pareja.id,
+
+author_id:usuario.id,
+
+title:titulo,
+
+body:cuerpo
+
+});
+
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+
+document
+.getElementById("tituloPost")
+.value="";
+
+document
+.getElementById("cuerpoPost")
+.value="";
+
+
+postMensaje.className="success";
+
+postMensaje.textContent=
+"¡Guardado en vuestro diario! ❤️";
+
+
+await cargarPosts();
+
+
+}catch(error){
+
+console.error(error);
+
+postMensaje.className="error";
+
+postMensaje.textContent=
+"ERROR: "+
+error.message;
+
+}finally{
+
+boton.disabled=false;
+
+boton.textContent=
+"Publicar en nuestro diario ❤️";
+
+}
+
+}
+);
+
+
+/* =========================================
+   CARGAR PUBLICACIONES
+========================================= */
+
+async function cargarPosts(){
+
+if(!pareja){
+
+return;
+
+}
+
+
+const lista =
+document.getElementById("listaPosts");
+
+
+lista.innerHTML =
+'<div class="empty">Cargando...</div>';
+
+
+try{
+
+const resultado =
+await supabase
+.from("posts")
+.select(
+"id, couple_id, author_id, title, body, created_at"
+)
+.eq(
+"couple_id",
+pareja.id
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+
+if(
+!resultado.data ||
+resultado.data.length===0
+){
+
+lista.innerHTML =
+'<div class="empty">Todavía no hay recuerdos. ❤️<br>Escriban el primero.</div>';
+
+return;
+
+}
+
+
+lista.innerHTML="";
+
+
+resultado.data.forEach(
+post=>{
+
+const elemento =
+document.createElement("article");
+
+elemento.className="post";
+
+
+const fecha =
+new Date(
+post.created_at
+).toLocaleString(
+"es-EC",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+);
+
+
+const autor =
+post.author_id === usuario.id
+? "Tú"
+: "Tu pareja";
+
+
+elemento.innerHTML=`
+<h3>${escapeHTML(post.title)}</h3>
+<div class="post-body">${escapeHTML(post.body)}</div>
+<div class="post-info">
+❤️ ${autor} · ${fecha}
+</div>
+`;
+
+
+lista.appendChild(elemento);
+
+}
+);
+
+
+}catch(error){
+
+console.error(error);
+
+lista.innerHTML =
+'<div class="message error">No se pudieron cargar los recuerdos: '
++
+escapeHTML(error.message)
++
+'</div>';
+
+}
+
+}
+
+
+/* =========================================
+   SEGURIDAD PARA MOSTRAR TEXTO
+========================================= */
+
+function escapeHTML(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
@@ -1019,4 +1378,4 @@ await abrirAplicacion();
 </script>
 
 </body>
-</html>
+     </html>
