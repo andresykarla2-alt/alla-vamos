@@ -19,7 +19,7 @@ color:#432733;
 
 .card{
 width:90%;
-max-width:400px;
+max-width:430px;
 background:white;
 padding:30px;
 border-radius:25px;
@@ -62,23 +62,62 @@ color:#603849;
 display:none;
 }
 
-#mensaje{
+#mensaje,
+#parejaMensaje{
 margin-top:15px;
 padding:10px;
 word-break:break-word;
+}
+
+.success{
+color:#28603d;
+}
+
+.error{
+color:#8b3030;
+}
+
+.codigo{
+font-size:30px;
+font-family:monospace;
+font-weight:bold;
+letter-spacing:5px;
+background:#f1e1e0;
+padding:15px;
+border-radius:15px;
+margin:20px 0;
+}
+
+#app{
+display:none;
+width:100%;
+}
+
+.top{
+text-align:center;
+}
+
+.heart{
+font-size:50px;
+}
+
+.logout{
+background:#e5d5d3;
+color:#633d4b;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div id="loginScreen" class="card">
 
-<div style="font-size:50px">♥</div>
+<div class="heart">♥</div>
 
 <h1>Allá vamos</h1>
 
 <p>Nuestro pequeño lugar en el mundo</p>
+
 
 <div id="login">
 
@@ -133,7 +172,67 @@ Volver
 
 </div>
 
+
 <div id="mensaje"></div>
+
+</div>
+
+
+<div id="app">
+
+<div class="card">
+
+<div class="top">
+
+<div class="heart">♥</div>
+
+<h1>Allá vamos</h1>
+
+<p id="bienvenida"></p>
+
+</div>
+
+
+<h2>❤️ Nuestro espacio</h2>
+
+<p>
+Este es vuestro espacio privado.
+</p>
+
+<h3>Tu código de pareja</h3>
+
+<p>
+Comparte este código con tu pareja:
+</p>
+
+<div
+id="codigo"
+class="codigo">
+CREANDO...
+</div>
+
+
+<h3>¿Tu pareja ya tiene un código?</h3>
+
+<input
+id="codigoPareja"
+placeholder="Escribe el código">
+
+
+<button id="vincular">
+Vincular pareja
+</button>
+
+<div id="parejaMensaje"></div>
+
+
+<button
+id="cerrarSesion"
+class="logout">
+Cerrar sesión
+</button>
+
+</div>
 
 </div>
 
@@ -148,9 +247,9 @@ from
 
 
 /*
-========================================
+================================================
 TUS DATOS DE SUPABASE
-========================================
+================================================
 */
 
 const SUPABASE_URL =
@@ -167,17 +266,21 @@ SUPABASE_KEY
 );
 
 
+let usuario=null;
+let pareja=null;
+
+
 /*
-========================================
-CAMBIAR A REGISTRO
-========================================
+================================================
+MOSTRAR REGISTRO
+================================================
 */
 
 document
 .getElementById("crear")
 .addEventListener(
 "click",
-function(){
+()=>{
 
 document
 .getElementById("login")
@@ -196,16 +299,16 @@ document
 
 
 /*
-========================================
-VOLVER
-========================================
+================================================
+VOLVER AL LOGIN
+================================================
 */
 
 document
 .getElementById("volver")
 .addEventListener(
 "click",
-function(){
+()=>{
 
 document
 .getElementById("registro")
@@ -215,45 +318,44 @@ document
 .getElementById("login")
 .classList.remove("hidden");
 
-document
-.getElementById("mensaje")
-.textContent="";
-
 }
 );
 
 
 /*
-========================================
-REGISTRO REAL
-========================================
+================================================
+CREAR CUENTA
+================================================
 */
 
 document
 .getElementById("registrar")
 .addEventListener(
 "click",
-async function(){
+async()=>{
 
-const mensaje =
+const mensaje=
 document.getElementById("mensaje");
 
-const boton =
+const boton=
 document.getElementById("registrar");
 
-const nombre =
+
+const nombre=
 document
 .getElementById("nombre")
 .value
 .trim();
 
-const email =
+
+const email=
 document
 .getElementById("emailRegistro")
 .value
 .trim();
 
-const password =
+
+const password=
 document
 .getElementById("passwordRegistro")
 .value;
@@ -261,7 +363,7 @@ document
 
 if(!nombre){
 
-mensaje.textContent =
+mensaje.textContent=
 "Escribe tu nombre.";
 
 return;
@@ -271,7 +373,7 @@ return;
 
 if(!email){
 
-mensaje.textContent =
+mensaje.textContent=
 "Escribe tu correo.";
 
 return;
@@ -279,9 +381,9 @@ return;
 }
 
 
-if(password.length < 6){
+if(password.length<6){
 
-mensaje.textContent =
+mensaje.textContent=
 "La contraseña debe tener al menos 6 caracteres.";
 
 return;
@@ -297,7 +399,7 @@ boton.textContent=
 
 try{
 
-const resultado =
+const resultado=
 await supabase.auth.signUp({
 
 email:email,
@@ -322,23 +424,25 @@ throw resultado.error;
 
 if(resultado.data.session){
 
-mensaje.textContent =
-"¡Cuenta creada correctamente! ❤️";
+usuario=
+resultado.data.user;
+
+await abrirAplicacion();
 
 }else{
 
-mensaje.textContent =
+mensaje.textContent=
 "Cuenta creada. Revisa tu correo para confirmar la cuenta. ❤️";
 
 }
+
 
 }catch(error){
 
 console.error(error);
 
-mensaje.textContent =
-"ERROR DE SUPABASE: "
-+
+mensaje.textContent=
+"ERROR DE SUPABASE: "+
 error.message;
 
 }finally{
@@ -350,31 +454,32 @@ boton.textContent=
 
 }
 
-});
+}
+);
 
 
 /*
-========================================
-ENTRAR
-========================================
+================================================
+INICIAR SESIÓN
+================================================
 */
 
 document
 .getElementById("entrar")
 .addEventListener(
 "click",
-async function(){
+async()=>{
 
-const mensaje =
+const mensaje=
 document.getElementById("mensaje");
 
-const email =
+const email=
 document
 .getElementById("email")
 .value
 .trim();
 
-const password =
+const password=
 document
 .getElementById("password")
 .value;
@@ -382,7 +487,7 @@ document
 
 if(!email){
 
-mensaje.textContent =
+mensaje.textContent=
 "Escribe tu correo.";
 
 return;
@@ -392,7 +497,7 @@ return;
 
 if(!password){
 
-mensaje.textContent =
+mensaje.textContent=
 "Escribe tu contraseña.";
 
 return;
@@ -402,7 +507,7 @@ return;
 
 try{
 
-const resultado =
+const resultado=
 await supabase.auth
 .signInWithPassword({
 
@@ -420,21 +525,330 @@ throw resultado.error;
 }
 
 
-mensaje.textContent =
-"¡Inicio de sesión correcto! ❤️";
+usuario=
+resultado.data.user;
+
+await abrirAplicacion();
+
 
 }catch(error){
 
-mensaje.textContent =
-"ERROR DE SUPABASE: "
-+
+console.error(error);
+
+mensaje.textContent=
+"ERROR DE SUPABASE: "+
 error.message;
 
 }
 
-});
+}
+);
+
+
+/*
+================================================
+ABRIR APLICACIÓN
+================================================
+*/
+
+async function abrirAplicacion(){
+
+document
+.getElementById("loginScreen")
+.style.display="none";
+
+
+document
+.getElementById("app")
+.style.display="block";
+
+
+const nombre=
+usuario.user_metadata?.display_name
+||"";
+
+
+document
+.getElementById("bienvenida")
+.textContent=
+nombre
+?
+`Hola ${nombre} ❤️`
+:
+"Nuestro pequeño lugar en el mundo";
+
+
+await cargarPareja();
+
+}
+
+
+/*
+================================================
+CARGAR PAREJA
+================================================
+*/
+
+async function cargarPareja(){
+
+try{
+
+const resultado=
+await supabase
+.from("couple_members")
+.select(`
+couple_id,
+couples (
+code
+)
+`)
+.eq(
+"user_id",
+usuario.id
+)
+.maybeSingle();
+
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+
+/*
+=============================================
+SI YA TIENE PAREJA
+=============================================
+*/
+
+if(resultado.data){
+
+pareja={
+id:resultado.data.couple_id,
+code:resultado.data.couples.code
+};
+
+
+document
+.getElementById("codigo")
+.textContent=
+pareja.code;
+
+
+return;
+
+}
+
+
+/*
+=============================================
+SI ES SU PRIMER INGRESO
+=============================================
+*/
+
+const crearPareja=
+await supabase.rpc(
+"create_my_couple"
+);
+
+
+if(crearPareja.error){
+
+throw crearPareja.error;
+
+}
+
+
+if(
+!crearPareja.data ||
+!crearPareja.data.length
+){
+
+throw new Error(
+"La función no devolvió un código de pareja."
+);
+
+}
+
+
+pareja={
+id:
+crearPareja.data[0].couple_id,
+
+code:
+crearPareja.data[0].invite_code
+};
+
+
+document
+.getElementById("codigo")
+.textContent=
+pareja.code;
+
+
+}catch(error){
+
+console.error(error);
+
+document
+.getElementById("codigo")
+.textContent=
+"ERROR";
+
+document
+.getElementById("parejaMensaje")
+.textContent=
+"Error: "+
+error.message;
+
+}
+
+}
+
+
+/*
+================================================
+VINCULAR PAREJA
+================================================
+*/
+
+document
+.getElementById("vincular")
+.addEventListener(
+"click",
+async()=>{
+
+const mensaje=
+document.getElementById("parejaMensaje");
+
+const codigo=
+document
+.getElementById("codigoPareja")
+.value
+.trim()
+.toUpperCase();
+
+
+if(!codigo){
+
+mensaje.textContent=
+"Escribe el código de tu pareja.";
+
+return;
+
+}
+
+
+try{
+
+const resultado=
+await supabase.rpc(
+"join_couple_by_code",
+{
+invite_code:codigo
+}
+);
+
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+
+if(
+!resultado.data ||
+!resultado.data.length
+){
+
+throw new Error(
+"No se pudo vincular la cuenta."
+);
+
+}
+
+
+pareja={
+id:
+resultado.data[0].couple_id,
+
+code:
+codigo
+};
+
+
+document
+.getElementById("codigo")
+.textContent=
+codigo;
+
+
+mensaje.className=
+"success";
+
+mensaje.textContent=
+"¡Las cuentas están vinculadas! ❤️";
+
+
+}catch(error){
+
+console.error(error);
+
+mensaje.className=
+"error";
+
+mensaje.textContent=
+"ERROR: "+
+error.message;
+
+}
+
+}
+);
+
+
+/*
+================================================
+CERRAR SESIÓN
+================================================
+*/
+
+document
+.getElementById("cerrarSesion")
+.addEventListener(
+"click",
+async()=>{
+
+await supabase.auth.signOut();
+
+location.reload();
+
+}
+);
+
+
+/*
+================================================
+COMPROBAR SESIÓN EXISTENTE
+================================================
+*/
+
+const sesion=
+await supabase.auth.getSession();
+
+
+if(sesion.data.session){
+
+usuario=
+sesion.data.session.user;
+
+await abrirAplicacion();
+
+}
 
 </script>
 
 </body>
-</html>
+</html> 
