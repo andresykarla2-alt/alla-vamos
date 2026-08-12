@@ -6,12 +6,11 @@
 <title>Allá vamos ❤️</title>
 
 <style>
+*{box-sizing:border-box}
+
 body{
 margin:0;
 min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
 background:linear-gradient(135deg,#fff5f2,#ead5d9);
 font-family:Georgia,serif;
 color:#432733;
@@ -20,6 +19,7 @@ color:#432733;
 .card{
 width:90%;
 max-width:430px;
+margin:40px auto;
 background:white;
 padding:30px;
 border-radius:25px;
@@ -30,13 +30,17 @@ text-align:center;
 h1{
 font-size:40px;
 font-weight:normal;
+margin:10px 0;
+}
+
+h2{
+font-weight:normal;
 }
 
 input{
 width:100%;
 padding:14px;
 margin:8px 0;
-box-sizing:border-box;
 border:1px solid #dcc8cc;
 border-radius:12px;
 font-size:16px;
@@ -53,27 +57,41 @@ color:white;
 font-size:16px;
 }
 
+button:disabled{
+opacity:.6;
+}
+
 .secondary{
 background:#eadcdf;
 color:#603849;
 }
 
-.hidden{
-display:none;
+.danger{
+background:#8b4a55;
 }
 
-#mensaje,
-#parejaMensaje{
+.hidden{
+display:none!important;
+}
+
+.heart{
+font-size:50px;
+}
+
+.message{
 margin-top:15px;
 padding:10px;
+border-radius:10px;
 word-break:break-word;
 }
 
 .success{
+background:#e0f0e4;
 color:#28603d;
 }
 
 .error{
+background:#f7dddd;
 color:#8b3030;
 }
 
@@ -88,17 +106,26 @@ border-radius:15px;
 margin:20px 0;
 }
 
+.option{
+background:#fff9f7;
+border:1px solid #ead9d6;
+border-radius:18px;
+padding:18px;
+margin:15px 0;
+}
+
+.option h3{
+margin-top:0;
+}
+
+.small{
+font-family:Arial,sans-serif;
+font-size:13px;
+color:#806b73;
+}
+
 #app{
 display:none;
-width:100%;
-}
-
-.top{
-text-align:center;
-}
-
-.heart{
-font-size:50px;
 }
 
 .logout{
@@ -109,6 +136,11 @@ color:#633d4b;
 </head>
 
 <body>
+
+
+<!-- =========================================
+     LOGIN
+========================================= -->
 
 <div id="loginScreen" class="card">
 
@@ -178,11 +210,14 @@ Volver
 </div>
 
 
+
+<!-- =========================================
+     APLICACIÓN
+========================================= -->
+
 <div id="app">
 
 <div class="card">
-
-<div class="top">
 
 <div class="heart">♥</div>
 
@@ -190,40 +225,89 @@ Volver
 
 <p id="bienvenida"></p>
 
-</div>
 
+<!-- =========================================
+     CONFIGURAR PAREJA
+========================================= -->
+
+<div id="configuracionPareja">
 
 <h2>❤️ Nuestro espacio</h2>
 
 <p>
-Este es vuestro espacio privado.
+Primero vamos a conectar vuestras cuentas.
 </p>
 
-<h3>Tu código de pareja</h3>
+
+<div class="option">
+
+<h3>Crear nuestro espacio</h3>
+
+<p class="small">
+Si eres la primera persona de la pareja,
+crea un espacio nuevo.
+</p>
+
+<button id="crearPareja">
+Crear nuestro espacio
+</button>
+
+</div>
+
+
+<div class="option">
+
+<h3>Ya tengo un código</h3>
+
+<p class="small">
+Si tu pareja ya creó el espacio,
+introduce aquí su código.
+</p>
+
+<input
+id="codigoPareja"
+placeholder="Código de pareja">
+
+<button id="vincular">
+Vincularme con mi pareja
+</button>
+
+</div>
+
+
+<div id="parejaMensaje"></div>
+
+</div>
+
+
+<!-- =========================================
+     ESPACIO YA CREADO
+========================================= -->
+
+<div id="espacioPareja" class="hidden">
+
+<h2>❤️ Nuestro espacio</h2>
 
 <p>
-Comparte este código con tu pareja:
+¡Ya están conectados!
+</p>
+
+<p>
+Este es vuestro código:
 </p>
 
 <div
 id="codigo"
 class="codigo">
-CREANDO...
+--------
 </div>
 
+<p class="small">
+Guarda este código para poder vincular
+el otro teléfono.
+</p>
 
-<h3>¿Tu pareja ya tiene un código?</h3>
-
-<input
-id="codigoPareja"
-placeholder="Escribe el código">
-
-
-<button id="vincular">
-Vincular pareja
-</button>
-
-<div id="parejaMensaje"></div>
+</div>
 
 
 <button
@@ -237,6 +321,7 @@ Cerrar sesión
 </div>
 
 
+
 <script type="module">
 
 import {
@@ -246,17 +331,15 @@ from
 "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 
-/*
-================================================
-TUS DATOS DE SUPABASE
-================================================
-*/
+/* =========================================
+   SUPABASE
+========================================= */
 
 const SUPABASE_URL =
-"https://sezjcwghptpamqcbbsgk.supabase.co";
+"REEMPLAZA_CON_TU_PROJECT_URL";
 
 const SUPABASE_KEY =
-"sb_publishable_NoDvovTUzD_np7sdK27d1w_fTpx-bCe";
+"REEMPLAZA_CON_TU_PUBLISHABLE_KEY";
 
 
 const supabase =
@@ -270,11 +353,26 @@ let usuario=null;
 let pareja=null;
 
 
-/*
-================================================
-MOSTRAR REGISTRO
-================================================
-*/
+/* =========================================
+   ELEMENTOS
+========================================= */
+
+const loginScreen =
+document.getElementById("loginScreen");
+
+const app =
+document.getElementById("app");
+
+const mensaje =
+document.getElementById("mensaje");
+
+const parejaMensaje =
+document.getElementById("parejaMensaje");
+
+
+/* =========================================
+   MOSTRAR REGISTRO
+========================================= */
 
 document
 .getElementById("crear")
@@ -290,19 +388,15 @@ document
 .getElementById("registro")
 .classList.remove("hidden");
 
-document
-.getElementById("mensaje")
-.textContent="";
+mensaje.textContent="";
 
 }
 );
 
 
-/*
-================================================
-VOLVER AL LOGIN
-================================================
-*/
+/* =========================================
+   VOLVER AL LOGIN
+========================================= */
 
 document
 .getElementById("volver")
@@ -318,15 +412,15 @@ document
 .getElementById("login")
 .classList.remove("hidden");
 
+mensaje.textContent="";
+
 }
 );
 
 
-/*
-================================================
-CREAR CUENTA
-================================================
-*/
+/* =========================================
+   CREAR CUENTA
+========================================= */
 
 document
 .getElementById("registrar")
@@ -334,31 +428,31 @@ document
 "click",
 async()=>{
 
-const mensaje=
-document.getElementById("mensaje");
-
-const boton=
+const boton =
 document.getElementById("registrar");
 
 
-const nombre=
+const nombre =
 document
 .getElementById("nombre")
 .value
 .trim();
 
 
-const email=
+const email =
 document
 .getElementById("emailRegistro")
 .value
 .trim();
 
 
-const password=
+const password =
 document
 .getElementById("passwordRegistro")
 .value;
+
+
+mensaje.className="";
 
 
 if(!nombre){
@@ -399,7 +493,7 @@ boton.textContent=
 
 try{
 
-const resultado=
+const resultado =
 await supabase.auth.signUp({
 
 email:email,
@@ -424,22 +518,27 @@ throw resultado.error;
 
 if(resultado.data.session){
 
-usuario=
+usuario =
 resultado.data.user;
 
 await abrirAplicacion();
 
 }else{
 
+mensaje.className=
+"success";
+
 mensaje.textContent=
 "Cuenta creada. Revisa tu correo para confirmar la cuenta. ❤️";
 
 }
 
-
 }catch(error){
 
 console.error(error);
+
+mensaje.className=
+"error";
 
 mensaje.textContent=
 "ERROR DE SUPABASE: "+
@@ -458,11 +557,9 @@ boton.textContent=
 );
 
 
-/*
-================================================
-INICIAR SESIÓN
-================================================
-*/
+/* =========================================
+   INICIAR SESIÓN
+========================================= */
 
 document
 .getElementById("entrar")
@@ -470,19 +567,20 @@ document
 "click",
 async()=>{
 
-const mensaje=
-document.getElementById("mensaje");
-
-const email=
+const email =
 document
 .getElementById("email")
 .value
 .trim();
 
-const password=
+
+const password =
 document
 .getElementById("password")
 .value;
+
+
+mensaje.className="";
 
 
 if(!email){
@@ -507,7 +605,7 @@ return;
 
 try{
 
-const resultado=
+const resultado =
 await supabase.auth
 .signInWithPassword({
 
@@ -525,7 +623,7 @@ throw resultado.error;
 }
 
 
-usuario=
+usuario =
 resultado.data.user;
 
 await abrirAplicacion();
@@ -534,6 +632,9 @@ await abrirAplicacion();
 }catch(error){
 
 console.error(error);
+
+mensaje.className=
+"error";
 
 mensaje.textContent=
 "ERROR DE SUPABASE: "+
@@ -545,55 +646,44 @@ error.message;
 );
 
 
-/*
-================================================
-ABRIR APLICACIÓN
-================================================
-*/
+/* =========================================
+   ABRIR APLICACIÓN
+========================================= */
 
 async function abrirAplicacion(){
 
-document
-.getElementById("loginScreen")
-.style.display="none";
+loginScreen.style.display="none";
+
+app.style.display="block";
 
 
-document
-.getElementById("app")
-.style.display="block";
-
-
-const nombre=
+const nombre =
 usuario.user_metadata?.display_name
 ||"";
 
 
 document
 .getElementById("bienvenida")
-.textContent=
+.textContent =
 nombre
-?
-`Hola ${nombre} ❤️`
-:
-"Nuestro pequeño lugar en el mundo";
+? `Hola ${nombre} ❤️`
+: "Nuestro pequeño lugar en el mundo";
 
 
-await cargarPareja();
+await comprobarPareja();
 
 }
 
 
-/*
-================================================
-CARGAR PAREJA
-================================================
-*/
+/* =========================================
+   COMPROBAR SI YA PERTENECE A UNA PAREJA
+========================================= */
 
-async function cargarPareja(){
+async function comprobarPareja(){
 
 try{
 
-const resultado=
+const resultado =
 await supabase
 .from("couple_members")
 .select(`
@@ -617,9 +707,7 @@ throw resultado.error;
 
 
 /*
-=============================================
-SI YA TIENE PAREJA
-=============================================
+SI YA PERTENECE A UNA PAREJA
 */
 
 if(resultado.data){
@@ -629,12 +717,7 @@ id:resultado.data.couple_id,
 code:resultado.data.couples.code
 };
 
-
-document
-.getElementById("codigo")
-.textContent=
-pareja.code;
-
+mostrarPareja();
 
 return;
 
@@ -642,64 +725,27 @@ return;
 
 
 /*
-=============================================
-SI ES SU PRIMER INGRESO
-=============================================
+SI NO PERTENECE A NINGUNA,
+MOSTRAMOS LAS DOS OPCIONES.
 */
 
-const crearPareja=
-await supabase.rpc(
-"create_my_couple"
-);
-
-
-if(crearPareja.error){
-
-throw crearPareja.error;
-
-}
-
-
-if(
-!crearPareja.data ||
-!crearPareja.data.length
-){
-
-throw new Error(
-"La función no devolvió un código de pareja."
-);
-
-}
-
-
-pareja={
-id:
-crearPareja.data[0].couple_id,
-
-code:
-crearPareja.data[0].invite_code
-};
-
+document
+.getElementById("configuracionPareja")
+.classList.remove("hidden");
 
 document
-.getElementById("codigo")
-.textContent=
-pareja.code;
+.getElementById("espacioPareja")
+.classList.add("hidden");
 
 
 }catch(error){
 
 console.error(error);
 
-document
-.getElementById("codigo")
-.textContent=
-"ERROR";
+parejaMensaje.className="error";
 
-document
-.getElementById("parejaMensaje")
-.textContent=
-"Error: "+
+parejaMensaje.textContent=
+"Error comprobando la pareja: "+
 error.message;
 
 }
@@ -707,11 +753,94 @@ error.message;
 }
 
 
-/*
-================================================
-VINCULAR PAREJA
-================================================
-*/
+/* =========================================
+   CREAR NUEVO ESPACIO
+========================================= */
+
+document
+.getElementById("crearPareja")
+.addEventListener(
+"click",
+async()=>{
+
+const boton =
+document.getElementById("crearPareja");
+
+
+boton.disabled=true;
+
+boton.textContent=
+"Creando espacio...";
+
+
+parejaMensaje.className="";
+
+
+try{
+
+const resultado =
+await supabase.rpc(
+"create_my_couple"
+);
+
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+
+if(
+!resultado.data ||
+!resultado.data.length
+){
+
+throw new Error(
+"La función no devolvió los datos esperados."
+);
+
+}
+
+
+pareja={
+id:
+resultado.data[0].couple_id,
+
+code:
+resultado.data[0].invite_code
+};
+
+
+mostrarPareja();
+
+
+}catch(error){
+
+console.error(error);
+
+parejaMensaje.className="error";
+
+parejaMensaje.textContent=
+"ERROR: "+
+error.message;
+
+}finally{
+
+boton.disabled=false;
+
+boton.textContent=
+"Crear nuestro espacio";
+
+}
+
+}
+);
+
+
+/* =========================================
+   VINCULAR A UNA PAREJA EXISTENTE
+========================================= */
 
 document
 .getElementById("vincular")
@@ -719,10 +848,11 @@ document
 "click",
 async()=>{
 
-const mensaje=
-document.getElementById("parejaMensaje");
+const boton =
+document.getElementById("vincular");
 
-const codigo=
+
+const codigo =
 document
 .getElementById("codigoPareja")
 .value
@@ -730,19 +860,30 @@ document
 .toUpperCase();
 
 
+parejaMensaje.className="";
+
+
 if(!codigo){
 
-mensaje.textContent=
-"Escribe el código de tu pareja.";
+parejaMensaje.className="error";
+
+parejaMensaje.textContent=
+"Introduce el código de tu pareja.";
 
 return;
 
 }
 
 
+boton.disabled=true;
+
+boton.textContent=
+"Vinculando...";
+
+
 try{
 
-const resultado=
+const resultado =
 await supabase.rpc(
 "join_couple_by_code",
 {
@@ -764,7 +905,7 @@ if(
 ){
 
 throw new Error(
-"No se pudo vincular la cuenta."
+"La función no devolvió los datos esperados."
 );
 
 }
@@ -779,29 +920,36 @@ codigo
 };
 
 
-document
-.getElementById("codigo")
-.textContent=
-codigo;
+parejaMensaje.className="success";
 
-
-mensaje.className=
-"success";
-
-mensaje.textContent=
+parejaMensaje.textContent=
 "¡Las cuentas están vinculadas! ❤️";
+
+
+setTimeout(
+()=>{
+mostrarPareja();
+},
+700
+);
 
 
 }catch(error){
 
 console.error(error);
 
-mensaje.className=
-"error";
+parejaMensaje.className="error";
 
-mensaje.textContent=
+parejaMensaje.textContent=
 "ERROR: "+
 error.message;
+
+}finally{
+
+boton.disabled=false;
+
+boton.textContent=
+"Vincularme con mi pareja";
 
 }
 
@@ -809,11 +957,33 @@ error.message;
 );
 
 
-/*
-================================================
-CERRAR SESIÓN
-================================================
-*/
+/* =========================================
+   MOSTRAR PAREJA
+========================================= */
+
+function mostrarPareja(){
+
+document
+.getElementById("configuracionPareja")
+.classList.add("hidden");
+
+
+document
+.getElementById("espacioPareja")
+.classList.remove("hidden");
+
+
+document
+.getElementById("codigo")
+.textContent =
+pareja.code;
+
+}
+
+
+/* =========================================
+   CERRAR SESIÓN
+========================================= */
 
 document
 .getElementById("cerrarSesion")
@@ -829,19 +999,17 @@ location.reload();
 );
 
 
-/*
-================================================
-COMPROBAR SESIÓN EXISTENTE
-================================================
-*/
+/* =========================================
+   SESIÓN EXISTENTE
+========================================= */
 
-const sesion=
+const sesion =
 await supabase.auth.getSession();
 
 
 if(sesion.data.session){
 
-usuario=
+usuario =
 sesion.data.session.user;
 
 await abrirAplicacion();
@@ -851,4 +1019,4 @@ await abrirAplicacion();
 </script>
 
 </body>
-</html> 
+</html>
