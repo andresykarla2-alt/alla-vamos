@@ -7,64 +7,65 @@
 
 <style>
 body{
-  margin:0;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#fff5f2,#ead5d9);
-  font-family:Georgia,serif;
-  color:#432733;
+margin:0;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#fff5f2,#ead5d9);
+font-family:Georgia,serif;
+color:#432733;
 }
 
 .card{
-  width:90%;
-  max-width:400px;
-  background:white;
-  padding:30px;
-  border-radius:25px;
-  box-shadow:0 10px 30px #0002;
-  text-align:center;
+width:90%;
+max-width:400px;
+background:white;
+padding:30px;
+border-radius:25px;
+box-shadow:0 10px 30px #0002;
+text-align:center;
 }
 
 h1{
-  font-size:40px;
-  font-weight:normal;
+font-size:40px;
+font-weight:normal;
 }
 
 input{
-  width:100%;
-  padding:14px;
-  margin:8px 0;
-  box-sizing:border-box;
-  border:1px solid #dcc8cc;
-  border-radius:12px;
-  font-size:16px;
+width:100%;
+padding:14px;
+margin:8px 0;
+box-sizing:border-box;
+border:1px solid #dcc8cc;
+border-radius:12px;
+font-size:16px;
 }
 
 button{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:0;
-  border-radius:12px;
-  background:#704157;
-  color:white;
-  font-size:16px;
+width:100%;
+padding:14px;
+margin-top:10px;
+border:0;
+border-radius:12px;
+background:#704157;
+color:white;
+font-size:16px;
 }
 
 .secondary{
-  background:#eadcdf;
-  color:#603849;
+background:#eadcdf;
+color:#603849;
 }
 
 .hidden{
-  display:none;
+display:none;
 }
 
 #mensaje{
-  margin-top:15px;
-  color:#704157;
+margin-top:15px;
+padding:10px;
+word-break:break-word;
 }
 </style>
 </head>
@@ -83,9 +84,15 @@ button{
 
 <h2>Entrar</h2>
 
-<input id="email" type="email" placeholder="Correo electrónico">
+<input
+id="email"
+type="email"
+placeholder="Correo electrónico">
 
-<input id="password" type="password" placeholder="Contraseña">
+<input
+id="password"
+type="password"
+placeholder="Contraseña">
 
 <button id="entrar">
 Entrar
@@ -102,11 +109,19 @@ Crear cuenta
 
 <h2>Crear cuenta</h2>
 
-<input id="nombre" placeholder="Tu nombre">
+<input
+id="nombre"
+placeholder="Tu nombre">
 
-<input id="emailRegistro" type="email" placeholder="Correo electrónico">
+<input
+id="emailRegistro"
+type="email"
+placeholder="Correo electrónico">
 
-<input id="passwordRegistro" type="password" placeholder="Contraseña">
+<input
+id="passwordRegistro"
+type="password"
+placeholder="Contraseña">
 
 <button id="registrar">
 Crear mi cuenta
@@ -123,60 +138,299 @@ Volver
 </div>
 
 
-<script>
+<script type="module">
 
-document.getElementById("crear").addEventListener("click",function(){
-
-document.getElementById("login").classList.add("hidden");
-
-document.getElementById("registro").classList.remove("hidden");
-
-document.getElementById("mensaje").textContent="";
-
-});
+import {
+createClient
+}
+from
+"https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 
-document.getElementById("volver").addEventListener("click",function(){
+/*
+========================================
+TUS DATOS DE SUPABASE
+========================================
+*/
 
-document.getElementById("registro").classList.add("hidden");
+const SUPABASE_URL =
+"PEGA_AQUI_TU_PROJECT_URL";
 
-document.getElementById("login").classList.remove("hidden");
-
-});
-
-
-document.getElementById("entrar").addEventListener("click",function(){
-
-document.getElementById("mensaje").textContent=
-"El botón Entrar funciona correctamente ❤️";
-
-});
+const SUPABASE_KEY =
+"PEGA_AQUI_TU_PUBLISHABLE_KEY";
 
 
-document.getElementById("registrar").addEventListener("click",function(){
-
-const nombre=
-document.getElementById("nombre").value.trim();
-
-const email=
-document.getElementById("emailRegistro").value.trim();
-
-const password=
-document.getElementById("passwordRegistro").value;
+const supabase =
+createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
-if(!nombre || !email || !password){
+/*
+========================================
+CAMBIAR A REGISTRO
+========================================
+*/
 
-document.getElementById("mensaje").textContent=
-"Completa todos los campos.";
+document
+.getElementById("crear")
+.addEventListener(
+"click",
+function(){
+
+document
+.getElementById("login")
+.classList.add("hidden");
+
+document
+.getElementById("registro")
+.classList.remove("hidden");
+
+document
+.getElementById("mensaje")
+.textContent="";
+
+}
+);
+
+
+/*
+========================================
+VOLVER
+========================================
+*/
+
+document
+.getElementById("volver")
+.addEventListener(
+"click",
+function(){
+
+document
+.getElementById("registro")
+.classList.add("hidden");
+
+document
+.getElementById("login")
+.classList.remove("hidden");
+
+document
+.getElementById("mensaje")
+.textContent="";
+
+}
+);
+
+
+/*
+========================================
+REGISTRO REAL
+========================================
+*/
+
+document
+.getElementById("registrar")
+.addEventListener(
+"click",
+async function(){
+
+const mensaje =
+document.getElementById("mensaje");
+
+const boton =
+document.getElementById("registrar");
+
+const nombre =
+document
+.getElementById("nombre")
+.value
+.trim();
+
+const email =
+document
+.getElementById("emailRegistro")
+.value
+.trim();
+
+const password =
+document
+.getElementById("passwordRegistro")
+.value;
+
+
+if(!nombre){
+
+mensaje.textContent =
+"Escribe tu nombre.";
 
 return;
 
 }
 
 
-document.getElementById("mensaje").textContent=
-"¡El registro funciona correctamente, "+nombre+"! ❤️";
+if(!email){
+
+mensaje.textContent =
+"Escribe tu correo.";
+
+return;
+
+}
+
+
+if(password.length < 6){
+
+mensaje.textContent =
+"La contraseña debe tener al menos 6 caracteres.";
+
+return;
+
+}
+
+
+boton.disabled=true;
+
+boton.textContent=
+"Creando cuenta...";
+
+
+try{
+
+const resultado =
+await supabase.auth.signUp({
+
+email:email,
+
+password:password,
+
+options:{
+data:{
+display_name:nombre
+}
+}
+
+});
+
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+
+if(resultado.data.session){
+
+mensaje.textContent =
+"¡Cuenta creada correctamente! ❤️";
+
+}else{
+
+mensaje.textContent =
+"Cuenta creada. Revisa tu correo para confirmar la cuenta. ❤️";
+
+}
+
+}catch(error){
+
+console.error(error);
+
+mensaje.textContent =
+"ERROR DE SUPABASE: "
++
+error.message;
+
+}finally{
+
+boton.disabled=false;
+
+boton.textContent=
+"Crear mi cuenta";
+
+}
+
+});
+
+
+/*
+========================================
+ENTRAR
+========================================
+*/
+
+document
+.getElementById("entrar")
+.addEventListener(
+"click",
+async function(){
+
+const mensaje =
+document.getElementById("mensaje");
+
+const email =
+document
+.getElementById("email")
+.value
+.trim();
+
+const password =
+document
+.getElementById("password")
+.value;
+
+
+if(!email){
+
+mensaje.textContent =
+"Escribe tu correo.";
+
+return;
+
+}
+
+
+if(!password){
+
+mensaje.textContent =
+"Escribe tu contraseña.";
+
+return;
+
+}
+
+
+try{
+
+const resultado =
+await supabase.auth
+.signInWithPassword({
+
+email:email,
+
+password:password
+
+});
+
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+
+mensaje.textContent =
+"¡Inicio de sesión correcto! ❤️";
+
+}catch(error){
+
+mensaje.textContent =
+"ERROR DE SUPABASE: "
++
+error.message;
+
+}
 
 });
 
