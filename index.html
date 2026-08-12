@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#321b27"><title>Allá vamos ♥</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f8f1ed;color:#34232a;font-family:Georgia,serif}
+.hidden{display:none!important}.screen{min-height:100vh;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at top,#fffaf8,#ead9d5)}
+.card{width:min(430px,100%);background:#fffaf7;padding:30px 24px;border-radius:28px;box-shadow:0 18px 50px #3a20251c}
+.center{text-align:center}.heart{font-size:42px}.brand{font-size:38px;font-weight:normal;margin:5px}.muted{font:14px Arial;color:#806b72}
+input,textarea{width:100%;padding:13px;border:1px solid #dfc9c5;border-radius:14px;background:white;font:16px Arial;margin:7px 0}button{border:0;border-radius:13px;padding:12px 16px;background:#6f3d50;color:#fff;font-weight:bold;cursor:pointer}button.secondary{background:#eadbd8;color:#613949}.full{width:100%;margin-top:7px}.msg{font:13px Arial;color:#8f3c50;margin:9px 0}
+header{background:linear-gradient(145deg,#321b27,#714257);color:#fff;text-align:center;padding:26px 18px}.tag{font:12px Arial;letter-spacing:2px;opacity:.8}header h1{font-size:38px;font-weight:normal;margin:5px}
+nav{display:flex;gap:7px;overflow:auto;background:#fff;padding:10px;position:sticky;top:0;z-index:5;box-shadow:0 2px 12px #3a20250d}nav button{background:#f1e4e1;color:#613949;white-space:nowrap}nav button.active{background:#6f3d50;color:#fff}
+main{max-width:760px;margin:auto;padding:18px 15px 70px}.section-title{font-size:27px;font-weight:normal;margin:8px 0}.box,.item{background:#fffaf7;border-radius:20px;padding:17px;margin:13px 0;box-shadow:0 7px 22px #3a20250c}.date{font:11px Arial;color:#a17480;text-transform:uppercase;letter-spacing:1px}.item h3{font-weight:normal;margin:7px 0;font-size:21px}.small{font:12px Arial;color:#947e85}.danger{background:#eee0df;color:#6f3d50;margin-top:18px}
+.tabs{display:flex;gap:7px;margin-bottom:10px}.tabs button{flex:1}.code{font:bold 25px monospace;letter-spacing:3px;text-align:center;padding:12px;background:#f2e5e2;border-radius:14px;margin:10px 0}
+</style>
+</head>
+<body>
+
+<section id="auth" class="screen">
+<div class="card">
+<div class="center"><div class="heart">♥</div><div class="brand">Allá vamos</div><p class="muted">Nuestro pequeño lugar en el mundo</p></div>
+<div class="tabs"><button id="loginTab" onclick="authMode('login')">Entrar</button><button class="secondary" onclick="authMode('signup')">Crear cuenta</button></div>
+<div id="authForm">
+<input id="email" type="email" placeholder="Correo electrónico">
+<input id="pass" type="password" placeholder="Contraseña">
+<input id="name" class="hidden" placeholder="Tu nombre">
+<button class="full" onclick="submitAuth()">Continuar</button>
+</div>
+<p id="authMsg" class="msg"></p>
+</div></section>
+
+<section id="app" class="hidden">
+<header><div class="tag">NUESTRA HISTORIA</div><h1>Allá vamos ♥</h1><div id="welcome">Un lugar para guardar lo que somos.</div></header>
+<nav>
+<button class="active" onclick="show('inicio',this)">Inicio</button>
+<button onclick="show('diario',this)">📖 Diario</button>
+<button onclick="show('historia',this)">🗓️ Historia</button>
+<button onclick="show('cartas',this)">💌 Cartas</button>
+</nav>
+<main>
+<section id="inicio"><h2 class="section-title">Nuestro espacio</h2><p class="muted">Todo lo que guarden aquí se sincroniza entre las dos cuentas de la pareja.</p>
+<div class="box"><h3 style="font-weight:normal">Código de pareja</h3><p class="muted">Comparte este código con tu pareja para que pueda unirse.</p><div id="coupleCode" class="code">—</div></div>
+</section>
+
+<section id="diario" class="hidden"><h2 class="section-title">Nuestro diario</h2>
+<input id="postTitle" placeholder="Título"><textarea id="postText" rows="4" placeholder="Escribe un recuerdo..."></textarea><button onclick="addPost()">Guardar recuerdo</button><div id="posts"></div></section>
+
+<section id="historia" class="hidden"><h2 class="section-title">Nuestra historia</h2>
+<input id="momentDate" type="date"><input id="momentTitle" placeholder="Momento especial"><textarea id="momentText" rows="3" placeholder="¿Qué pasó?"></textarea><button onclick="addMoment()">Guardar momento</button><div id="moments"></div></section>
+
+<section id="cartas" class="hidden"><h2 class="section-title">Cartas</h2>
+<input id="letterTitle" placeholder="Para ti..."><textarea id="letterText" rows="6" placeholder="Escribe una carta"></textarea><button onclick="addLetter()">Guardar carta</button><div id="letters"></div></section>
+
+<div class="box"><h3 style="font-weight:normal">Unirse a una pareja</h3><p class="muted">Si todavía no tienes pareja vinculada, introduce el código que te compartieron.</p><input id="joinCode" placeholder="Código de 8 caracteres"><button onclick="joinCouple()">Vincular cuenta</button><p id="joinMsg" class="msg"></p></div>
+<button class="danger" onclick="logout()">Cerrar sesión</button>
+</main></section>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+/* PASO DE CONFIGURACIÓN:
+   Reemplaza estos dos valores por los de tu proyecto Supabase.
+*/
+const SUPABASE_URL="https://sezjcwghptpamqcbbsgk.supabase.co";
+const SUPABASE_KEY="sb_publishable_oEkzfuE0LuH5ja7rukPHQw_gVJC5nEp";
+const configured=!SUPABASE_URL.startsWith("PEGA_")&&!SUPABASE_KEY.startsWith("PEGA_");
+const sb=configured?createClient(SUPABASE_URL,SUPABASE_KEY):null;
+
+let mode="login", user=null, couple=null, channel=null;
+
+window.authMode=(m)=>{
+ mode=m; name.classList.toggle("hidden",m==="login");
+ loginTab.classList.toggle("secondary",m!=="login");
+ authMsg.textContent=m==="login"?"":"Crea una cuenta con tu correo y una contraseña.";
+}
+window.submitAuth=async()=>{
+ if(!configured){authMsg.textContent="Primero configura Supabase siguiendo el archivo CONFIGURACION.txt.";return}
+ authMsg.textContent="Procesando…";
+ const emailV=email.value.trim(), passV=pass.value, nameV=name.value.trim();
+ if(!emailV||passV.length<6){authMsg.textContent="Introduce un correo y una contraseña de al menos 6 caracteres.";return}
+ let res;
+ if(mode==="signup"){
+   res=await sb.auth.signUp({email:emailV,password:passV,options:{data:{display_name:nameV}}});
+   if(res.error){authMsg.textContent=res.error.message;return}
+   if(!res.data.session){authMsg.textContent="Cuenta creada. Revisa tu correo para confirmar la cuenta y después entra.";return}
+ } else res=await sb.auth.signInWithPassword({email:emailV,password:passV});
+ if(res.error){authMsg.textContent=res.error.message;return}
+ await start(res.data.user);
+}
+async function start(u){
+ user=u; auth.classList.add("hidden"); app.classList.remove("hidden");
+ welcome.textContent=`Hola${u.user_metadata?.display_name?" "+u.user_metadata.display_name:""} ♥`;
+ const {data,error}=await sb.from("couple_members").select("couple_id,couples(code)").eq("user_id",u.id).maybeSingle();
+ if(error){alert(error.message);return}
+ couple=data?.couples?{id:data.couple_id,code:data.couples.code}:null;
+ if(couple){coupleCode.textContent=couple.code;await loadAll();subscribe();}
+ else coupleCode.textContent="SIN VINCULAR";
+}
+window.joinCouple=async()=>{
+ if(!user){joinMsg.textContent="Inicia sesión primero.";return}
+ const c=joinCode.value.trim().toUpperCase();
+ if(!c){joinMsg.textContent="Escribe un código.";return}
+ const {data,error}=await sb.rpc("join_couple_by_code",{invite_code:c});
+ if(error){joinMsg.textContent=error.message;return}
+ couple={id:data.couple_id,code:c};coupleCode.textContent=c;joinMsg.textContent="¡Cuenta vinculada! ♥";await loadAll();subscribe();
+}
+async function loadAll(){
+ const tables=["posts","moments","letters"];
+ for(const t of tables){
+  const {data,error}=await sb.from(t).select("*").eq("couple_id",couple.id).order("created_at",{ascending:false});
+  if(error){console.error(error);continue}
+  renderTable(t,data||[]);
+ }
+}
+function subscribe(){
+ if(channel)sb.removeChannel(channel);
+ channel=sb.channel("couple-"+couple.id).on("postgres_changes",{event:"*",schema:"public",table:"posts",filter:`couple_id=eq.${couple.id}`},loadAll)
+ .on("postgres_changes",{event:"*",schema:"public",table:"moments",filter:`couple_id=eq.${couple.id}`},loadAll)
+ .on("postgres_changes",{event:"*",schema:"public",table:"letters",filter:`couple_id=eq.${couple.id}`},loadAll).subscribe();
+}
+window.addPost=async()=>{
+ if(!couple){alert("Primero vincula las dos cuentas.");return}
+ const t=postTitle.value.trim(),x=postText.value.trim();if(!t||!x)return;
+ const {error}=await sb.from("posts").insert({couple_id:couple.id,title:t,body:x,author_id:user.id});
+ if(error)alert(error.message);else{postTitle.value="";postText.value="";await loadAll()}
+}
+window.addMoment=async()=>{
+ if(!couple)return;const d=momentDate.value,t=momentTitle.value.trim(),x=momentText.value.trim();if(!t)return;
+ const {error}=await sb.from("moments").insert({couple_id:couple.id,moment_date:d||null,title:t,body:x,author_id:user.id});
+ if(error)alert(error.message);else{momentTitle.value="";momentText.value="";await loadAll()}
+}
+window.addLetter=async()=>{
+ if(!couple)return;const t=letterTitle.value.trim()||"Para ti",x=letterText.value.trim();if(!x)return;
+ const {error}=await sb.from("letters").insert({couple_id:couple.id,title:t,body:x,author_id:user.id});
+ if(error)alert(error.message);else{letterTitle.value="";letterText.value="";await loadAll()}
+}
+window.show=(id,btn)=>{
+ document.querySelectorAll("main>section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+}
+window.logout=async()=>{await sb?.auth.signOut();location.reload()}
+function renderTable(t,rows){
+ const el={posts, moments, letters}[t];
+ el.innerHTML=rows.length?rows.map(r=>`<article class="item"><div class="date">${new Date(r.created_at).toLocaleDateString("es-EC")}</div><h3>${esc(r.title)}</h3><p>${esc(r.body).replace(/\n/g,"<br>")}</p><div class="small">Guardado por ${r.author_id===user.id?"ti":"tu pareja"} · sincronizado</div></article>`).join(""):`<div class="item muted">Todavía no hay contenido aquí. ♥</div>`;
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+if(!configured)authMsg.textContent="V2 lista. Falta conectar tu proyecto Supabase (ver CONFIGURACION.txt).";
+else {const {data}=await sb.auth.getSession();if(data.session)await start(data.session.user);}
+</script>
+</body></html>
