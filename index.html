@@ -6,755 +6,181 @@
 <title>Allá vamos ❤️</title>
 
 <style>
-*{box-sizing:border-box}
-
 body{
   margin:0;
-  font-family:Georgia,serif;
-  background:linear-gradient(135deg,#fff7f4,#ead9d5);
-  color:#39252c;
-}
-
-.app{
-  max-width:600px;
-  margin:auto;
   min-height:100vh;
-}
-
-header{
-  text-align:center;
-  padding:45px 20px 30px;
-  background:linear-gradient(145deg,#351d29,#75465a);
-  color:white;
-  border-radius:0 0 35px 35px;
-}
-
-.heart{
-  font-size:48px;
-}
-
-h1{
-  font-size:42px;
-  font-weight:normal;
-  margin:5px 0;
-}
-
-.subtitle{
-  opacity:.85;
-  font-family:Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#fff5f2,#ead5d9);
+  font-family:Georgia,serif;
+  color:#432733;
 }
 
 .card{
-  background:#fffaf8;
-  margin:20px;
-  padding:22px;
+  width:90%;
+  max-width:400px;
+  background:white;
+  padding:30px;
   border-radius:25px;
-  box-shadow:0 10px 30px rgba(50,25,35,.12);
+  box-shadow:0 10px 30px #0002;
+  text-align:center;
 }
 
-input,textarea{
+h1{
+  font-size:40px;
+  font-weight:normal;
+}
+
+input{
   width:100%;
   padding:14px;
-  margin:7px 0;
-  border:1px solid #dec9c6;
-  border-radius:14px;
+  margin:8px 0;
+  box-sizing:border-box;
+  border:1px solid #dcc8cc;
+  border-radius:12px;
   font-size:16px;
-  background:white;
-}
-
-textarea{
-  resize:vertical;
 }
 
 button{
   width:100%;
   padding:14px;
-  margin-top:8px;
+  margin-top:10px;
   border:0;
-  border-radius:14px;
-  background:#714157;
+  border-radius:12px;
+  background:#704157;
   color:white;
   font-size:16px;
-  font-weight:bold;
-}
-
-button:disabled{
-  opacity:.6;
 }
 
 .secondary{
-  background:#eadbd8;
-  color:#603949;
+  background:#eadcdf;
+  color:#603849;
 }
 
 .hidden{
-  display:none!important;
+  display:none;
 }
 
-.message{
-  margin-top:12px;
-  padding:10px;
-  border-radius:10px;
-  font-family:Arial,sans-serif;
-  font-size:14px;
-  word-break:break-word;
-}
-
-.error{
-  background:#f7dddd;
-  color:#8b3030;
-}
-
-.success{
-  background:#dcefe3;
-  color:#28603d;
-}
-
-nav{
-  display:flex;
-  gap:7px;
-  padding:12px;
-  background:#fffaf8;
-  position:sticky;
-  top:0;
-  z-index:10;
-  overflow:auto;
-}
-
-nav button{
-  width:auto;
-  white-space:nowrap;
-  margin:0;
-  padding:10px 13px;
-  background:#eadbd8;
-  color:#603949;
-}
-
-nav button.active{
-  background:#714157;
-  color:white;
-}
-
-.code{
-  text-align:center;
-  font-family:monospace;
-  font-size:26px;
-  font-weight:bold;
-  letter-spacing:4px;
-  background:#f0e1df;
-  padding:15px;
-  border-radius:15px;
-}
-
-.item{
-  background:white;
-  padding:17px;
-  margin-top:13px;
-  border-radius:18px;
-}
-
-.item h3{
-  margin:5px 0;
-  font-weight:normal;
-}
-
-.small{
-  color:#947b84;
-  font:12px Arial,sans-serif;
-}
-
-.logout{
-  background:#e6d5d3;
-  color:#693d4d;
-  margin-bottom:30px;
+#mensaje{
+  margin-top:15px;
+  color:#704157;
 }
 </style>
 </head>
 
 <body>
 
-<div id="loginScreen" class="app">
-
-<header>
-<div class="heart">♥</div>
-<h1>Allá vamos</h1>
-<div class="subtitle">Nuestro pequeño lugar en el mundo</div>
-</header>
-
 <div class="card">
 
-<div id="loginMode">
+<div style="font-size:50px">♥</div>
+
+<h1>Allá vamos</h1>
+
+<p>Nuestro pequeño lugar en el mundo</p>
+
+<div id="login">
 
 <h2>Entrar</h2>
 
-<input id="loginEmail"
-type="email"
-placeholder="Correo electrónico">
+<input id="email" type="email" placeholder="Correo electrónico">
 
-<input id="loginPassword"
-type="password"
-placeholder="Contraseña">
+<input id="password" type="password" placeholder="Contraseña">
 
-<button id="loginButton">
+<button id="entrar">
 Entrar
 </button>
 
-<p>
-¿Aún no tienes cuenta?
-</p>
-
-<button id="showSignup" class="secondary">
+<button id="crear" class="secondary">
 Crear cuenta
 </button>
 
 </div>
 
-<div id="signupMode" class="hidden">
+
+<div id="registro" class="hidden">
 
 <h2>Crear cuenta</h2>
 
-<input id="signupName"
-type="text"
-placeholder="Tu nombre">
+<input id="nombre" placeholder="Tu nombre">
 
-<input id="signupEmail"
-type="email"
-placeholder="Correo electrónico">
+<input id="emailRegistro" type="email" placeholder="Correo electrónico">
 
-<input id="signupPassword"
-type="password"
-placeholder="Contraseña">
+<input id="passwordRegistro" type="password" placeholder="Contraseña">
 
-<button id="signupButton">
+<button id="registrar">
 Crear mi cuenta
 </button>
 
-<p>
-¿Ya tienes cuenta?
-</p>
-
-<button id="showLogin" class="secondary">
-Volver a entrar
+<button id="volver" class="secondary">
+Volver
 </button>
 
 </div>
 
-<div id="authMessage"></div>
+<div id="mensaje"></div>
 
 </div>
-</div>
 
 
-<div id="appScreen" class="app hidden">
+<script>
 
-<header>
-<div class="heart">♥</div>
-<h1>Allá vamos</h1>
-<div id="welcome"></div>
-</header>
+document.getElementById("crear").addEventListener("click",function(){
 
-<nav>
-<button class="active" data-section="home">Inicio</button>
-<button data-section="diary">📖 Diario</button>
-<button data-section="history">🗓️ Historia</button>
-<button data-section="letters">💌 Cartas</button>
-</nav>
+document.getElementById("login").classList.add("hidden");
 
-<main>
+document.getElementById("registro").classList.remove("hidden");
 
-<section id="home" class="card app-section">
-
-<h2>Nuestro espacio ❤️</h2>
-
-<p>
-Este es vuestro pequeño rincón privado.
-</p>
-
-<h3>Código de pareja</h3>
-
-<p>
-Comparte este código con tu pareja:
-</p>
-
-<div id="coupleCode" class="code">
-CREANDO...
-</div>
-
-</section>
-
-
-<section id="diary" class="card app-section hidden">
-
-<h2>📖 Nuestro diario</h2>
-
-<input id="postTitle" placeholder="Título del recuerdo">
-
-<textarea
-id="postBody"
-rows="5"
-placeholder="Escribe algo que quieras guardar..."></textarea>
-
-<button id="savePost">
-Guardar recuerdo
-</button>
-
-<div id="postsList"></div>
-
-</section>
-
-
-<section id="history" class="card app-section hidden">
-
-<h2>🗓️ Nuestra historia</h2>
-
-<input id="momentDate" type="date">
-
-<input id="momentTitle" placeholder="Título">
-
-<textarea
-id="momentBody"
-rows="4"
-placeholder="Cuéntanos qué ocurrió..."></textarea>
-
-<button id="saveMoment">
-Guardar momento
-</button>
-
-<div id="momentsList"></div>
-
-</section>
-
-
-<section id="letters" class="card app-section hidden">
-
-<h2>💌 Cartas</h2>
-
-<input id="letterTitle" placeholder="Título de la carta">
-
-<textarea
-id="letterBody"
-rows="7"
-placeholder="Escribe una carta para tu pareja..."></textarea>
-
-<button id="saveLetter">
-Guardar carta
-</button>
-
-<div id="lettersList"></div>
-
-</section>
-
-
-<section class="card">
-
-<h3>❤️ Vincular a mi pareja</h3>
-
-<p>
-Introduce el código que te dio tu pareja.
-</p>
-
-<input
-id="joinCode"
-placeholder="Código de pareja">
-
-<button id="joinButton">
-Vincular cuenta
-</button>
-
-<div id="joinMessage"></div>
-
-</section>
-
-
-<section class="card">
-
-<button id="logoutButton" class="logout">
-Cerrar sesión
-</button>
-
-</section>
-
-</main>
-</div>
-
-
-<script type="module">
-
-import {
-createClient
-} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-
-/*
-==================================================
-IMPORTANTE
-==================================================
-
-REEMPLAZA SOLAMENTE ESTOS DOS VALORES.
-
-NO CAMBIES LAS COMILLAS.
-*/
-
-const SUPABASE_URL = "PEGA_AQUI_TU_SUPABASE_URL";
-
-const SUPABASE_KEY = "PEGA_AQUI_TU_SUPABASE_PUBLISHABLE_KEY";
-
-
-const supabase = createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-
-let currentUser = null;
-let currentCouple = null;
-let realtimeChannel = null;
-
-
-const $ = id => document.getElementById(id);
-
-
-function showMessage(
-element,
-message,
-type="error"
-){
-
-element.className =
-"message " + type;
-
-element.textContent =
-message;
-
-}
-
-
-function clearMessage(element){
-
-element.className="";
-element.textContent="";
-
-}
-
-
-/* ==========================================
-   CAMBIAR ENTRE LOGIN Y REGISTRO
-========================================== */
-
-$("showSignup").addEventListener(
-"click",
-()=>{
-
-$("loginMode").classList.add("hidden");
-
-$("signupMode").classList.remove("hidden");
-
-clearMessage($("authMessage"));
-
-}
-);
-
-
-$("showLogin").addEventListener(
-"click",
-()=>{
-
-$("signupMode").classList.add("hidden");
-
-$("loginMode").classList.remove("hidden");
-
-clearMessage($("authMessage"));
-
-}
-);
-
-
-/* ==========================================
-   CREAR CUENTA
-========================================== */
-
-$("signupButton").addEventListener(
-"click",
-async()=>{
-
-const button=$("signupButton");
-
-const name=
-$("signupName").value.trim();
-
-const email=
-$("signupEmail").value.trim();
-
-const password=
-$("signupPassword").value;
-
-
-clearMessage($("authMessage"));
-
-
-if(!name){
-
-showMessage(
-$("authMessage"),
-"Escribe tu nombre."
-);
-
-return;
-
-}
-
-
-if(!email){
-
-showMessage(
-$("authMessage"),
-"Escribe tu correo electrónico."
-);
-
-return;
-
-}
-
-
-if(password.length<6){
-
-showMessage(
-$("authMessage"),
-"La contraseña debe tener al menos 6 caracteres."
-);
-
-return;
-
-}
-
-
-button.disabled=true;
-
-button.textContent=
-"Creando cuenta...";
-
-
-try{
-
-const result =
-await supabase.auth.signUp({
-
-email:email,
-
-password:password,
-
-options:{
-data:{
-display_name:name
-}
-}
+document.getElementById("mensaje").textContent="";
 
 });
 
 
-if(result.error){
+document.getElementById("volver").addEventListener("click",function(){
 
-throw result.error;
+document.getElementById("registro").classList.add("hidden");
 
-}
-
-
-/*
-Si Supabase tiene activada la confirmación
-por correo, no habrá sesión todavía.
-*/
-
-if(!result.data.session){
-
-showMessage(
-$("authMessage"),
-"Cuenta creada correctamente. Revisa tu correo para confirmar la cuenta y después inicia sesión.",
-"success"
-);
-
-return;
-
-}
-
-
-await openApplication(
-result.data.user
-);
-
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
-$("authMessage"),
-"Error: "+error.message
-);
-
-}finally{
-
-button.disabled=false;
-
-button.textContent=
-"Crear mi cuenta";
-
-}
-
-}
-);
-
-
-/* ==========================================
-   INICIAR SESIÓN
-========================================== */
-
-$("loginButton").addEventListener(
-"click",
-async()=>{
-
-const button=$("loginButton");
-
-const email=
-$("loginEmail").value.trim();
-
-const password=
-$("loginPassword").value;
-
-
-clearMessage($("authMessage"));
-
-
-if(!email){
-
-showMessage(
-$("authMessage"),
-"Escribe tu correo."
-);
-
-return;
-
-}
-
-
-if(!password){
-
-showMessage(
-$("authMessage"),
-"Escribe tu contraseña."
-);
-
-return;
-
-}
-
-
-button.disabled=true;
-
-button.textContent=
-"Entrando...";
-
-
-try{
-
-const result =
-await supabase.auth.signInWithPassword({
-
-email:email,
-
-password:password
+document.getElementById("login").classList.remove("hidden");
 
 });
 
 
-if(result.error){
+document.getElementById("entrar").addEventListener("click",function(){
 
-throw result.error;/* PASO DE CONFIGURACIÓN:
-   Reemplaza estos dos valores por los de tu proyecto Supabase.
-*/
-const SUPABASE_URL="https://sezjcwghptpamqcbbsgk.supabase.co";
-const SUPABASE_KEY="sb_publishable_oEkzfuE0LuH5ja7rukPHQw_gVJC5nEp";
-const configured=!SUPABASE_URL.startsWith("PEGA_")&&!SUPABASE_KEY.startsWith("PEGA_");
-const sb=configured?createClient(SUPABASE_URL,SUPABASE_KEY):null;
+document.getElementById("mensaje").textContent=
+"El botón Entrar funciona correctamente ❤️";
 
-let mode="login", user=null, couple=null, channel=null;
+});
 
-window.authMode=(m)=>{
- mode=m; name.classList.toggle("hidden",m==="login");
- loginTab.classList.toggle("secondary",m!=="login");
- authMsg.textContent=m==="login"?"":"Crea una cuenta con tu correo y una contraseña.";
+
+document.getElementById("registrar").addEventListener("click",function(){
+
+const nombre=
+document.getElementById("nombre").value.trim();
+
+const email=
+document.getElementById("emailRegistro").value.trim();
+
+const password=
+document.getElementById("passwordRegistro").value;
+
+
+if(!nombre || !email || !password){
+
+document.getElementById("mensaje").textContent=
+"Completa todos los campos.";
+
+return;
+
 }
-window.submitAuth=async()=>{
- if(!configured){authMsg.textContent="Primero configura Supabase siguiendo el archivo CONFIGURACION.txt.";return}
- authMsg.textContent="Procesando…";
- const emailV=email.value.trim(), passV=pass.value, nameV=name.value.trim();
- if(!emailV||passV.length<6){authMsg.textContent="Introduce un correo y una contraseña de al menos 6 caracteres.";return}
- let res;
- if(mode==="signup"){
-   res=await sb.auth.signUp({email:emailV,password:passV,options:{data:{display_name:nameV}}});
-   if(res.error){authMsg.textContent=res.error.message;return}
-   if(!res.data.session){authMsg.textContent="Cuenta creada. Revisa tu correo para confirmar la cuenta y después entra.";return}
- } else res=await sb.auth.signInWithPassword({email:emailV,password:passV});
- if(res.error){authMsg.textContent=res.error.message;return}
- await start(res.data.user);
-}
-async function start(u){
- user=u; auth.classList.add("hidden"); app.classList.remove("hidden");
- welcome.textContent=`Hola${u.user_metadata?.display_name?" "+u.user_metadata.display_name:""} ♥`;
- const {data,error}=await sb.from("couple_members").select("couple_id,couples(code)").eq("user_id",u.id).maybeSingle();
- if(error){alert(error.message);return}
- couple=data?.couples?{id:data.couple_id,code:data.couples.code}:null;
- if(couple){coupleCode.textContent=couple.code;await loadAll();subscribe();}
- else coupleCode.textContent="SIN VINCULAR";
-}
-window.joinCouple=async()=>{
- if(!user){joinMsg.textContent="Inicia sesión primero.";return}
- const c=joinCode.value.trim().toUpperCase();
- if(!c){joinMsg.textContent="Escribe un código.";return}
- const {data,error}=await sb.rpc("join_couple_by_code",{invite_code:c});
- if(error){joinMsg.textContent=error.message;return}
- couple={id:data.couple_id,code:c};coupleCode.textContent=c;joinMsg.textContent="¡Cuenta vinculada! ♥";await loadAll();subscribe();
-}
-async function loadAll(){
- const tables=["posts","moments","letters"];
- for(const t of tables){
-  const {data,error}=await sb.from(t).select("*").eq("couple_id",couple.id).order("created_at",{ascending:false});
-  if(error){console.error(error);continue}
-  renderTable(t,data||[]);
- }
-}
-function subscribe(){
- if(channel)sb.removeChannel(channel);
- channel=sb.channel("couple-"+couple.id).on("postgres_changes",{event:"*",schema:"public",table:"posts",filter:`couple_id=eq.${couple.id}`},loadAll)
- .on("postgres_changes",{event:"*",schema:"public",table:"moments",filter:`couple_id=eq.${couple.id}`},loadAll)
- .on("postgres_changes",{event:"*",schema:"public",table:"letters",filter:`couple_id=eq.${couple.id}`},loadAll).subscribe();
-}
-window.addPost=async()=>{
- if(!couple){alert("Primero vincula las dos cuentas.");return}
- const t=postTitle.value.trim(),x=postText.value.trim();if(!t||!x)return;
- const {error}=await sb.from("posts").insert({couple_id:couple.id,title:t,body:x,author_id:user.id});
- if(error)alert(error.message);else{postTitle.value="";postText.value="";await loadAll()}
-}
-window.addMoment=async()=>{
- if(!couple)return;const d=momentDate.value,t=momentTitle.value.trim(),x=momentText.value.trim();if(!t)return;
- const {error}=await sb.from("moments").insert({couple_id:couple.id,moment_date:d||null,title:t,body:x,author_id:user.id});
- if(error)alert(error.message);else{momentTitle.value="";momentText.value="";await loadAll()}
-}
-window.addLetter=async()=>{
- if(!couple)return;const t=letterTitle.value.trim()||"Para ti",x=letterText.value.trim();if(!x)return;
- const {error}=await sb.from("letters").insert({couple_id:couple.id,title:t,body:x,author_id:user.id});
- if(error)alert(error.message);else{letterTitle.value="";letterText.value="";await loadAll()}
-}
-window.show=(id,btn)=>{
- document.querySelectorAll("main>section").forEach(s=>s.classList.add("hidden"));document.getElementById(id).classList.remove("hidden");
- document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
-}
-window.logout=async()=>{await sb?.auth.signOut();location.reload()}
-function renderTable(t,rows){
- const el={posts, moments, letters}[t];
- el.innerHTML=rows.length?rows.map(r=>`<article class="item"><div class="date">${new Date(r.created_at).toLocaleDateString("es-EC")}</div><h3>${esc(r.title)}</h3><p>${esc(r.body).replace(/\n/g,"<br>")}</p><div class="small">Guardado por ${r.author_id===user.id?"ti":"tu pareja"} · sincronizado</div></article>`).join(""):`<div class="item muted">Todavía no hay contenido aquí. ♥</div>`;
-}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-if(!configured)authMsg.textContent="V2 lista. Falta conectar tu proyecto Supabase (ver CONFIGURACION.txt).";
-else {const {data}=await sb.auth.getSession();if(data.session)await start(data.session.user);}
+
+
+document.getElementById("mensaje").textContent=
+"¡El registro funciona correctamente, "+nombre+"! ❤️";
+
+});
+
 </script>
-</body></html>
+
+</body>
+</html>
