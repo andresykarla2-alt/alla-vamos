@@ -1648,7 +1648,29 @@ async function cargarFotos() {
   }
 
   }
-/* =========================================
+const botonCerrarSesion =
+  document.getElementById("cerrarSesion");
+
+if (botonCerrarSesion) {
+
+  botonCerrarSesion.addEventListener("click", async () => {
+
+    const { error } =
+      await supabase.auth.signOut({
+        scope: "local"
+      });
+
+    if (error) {
+      alert("No se pudo cerrar sesión: " + error.message);
+      return;
+    }
+
+    window.location.reload();
+
+  });
+
+  }
+  /* =========================================
    SESIÓN EXISTENTE
 ========================================= */
 
