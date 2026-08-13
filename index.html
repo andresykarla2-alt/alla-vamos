@@ -1646,8 +1646,6 @@ async function cargarFotos() {
       '</div>';
 
   }
-
-  }
 const botonCerrarSesion =
   document.getElementById("cerrarSesion");
 
@@ -1661,15 +1659,26 @@ if (botonCerrarSesion) {
       });
 
     if (error) {
-      alert("No se pudo cerrar sesión: " + error.message);
+
+      console.error(error);
+
+      alert(
+        "No se pudo cerrar sesión: " +
+        error.message
+      );
+
       return;
     }
+
+    usuario = null;
 
     window.location.reload();
 
   });
 
   }
+ 
+
   /* =========================================
    SESIÓN EXISTENTE
 ========================================= */
