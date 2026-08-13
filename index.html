@@ -439,29 +439,7 @@ id="cerrarSesion"
 class="logout">
 Cerrar sesión
 </button>
-<script>
-  
-console.log("BOTON CERRAR SESION ENCONTRADO");
-  botonCerrarSesion.addEventListener("click", async () => {
 
-    const { error } =
-      await supabase.auth.signOut({
-        scope: "local"
-      });
-
-    if (error) {
-      console.error(error);
-      alert("No se pudo cerrar sesión: " + error.message);
-      return;
-    }
-
-    window.location.reload();
-
-  });
-
-}
-  } 
-</script>
 </div>
 
 </div>
@@ -1646,7 +1624,7 @@ async function cargarFotos() {
       '</div>';
 
   }
-  }
+  
 }
 
 
