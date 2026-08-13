@@ -397,7 +397,43 @@ Cargando nuestro diario...
 
 </div>
 
+<!-- FOTOS Y RECUERDOS -->
 
+<div id="fotos" class="section hidden">
+
+  <h2>📸 Fotos y recuerdos</h2>
+
+  <p class="small">
+    Guarden aquí sus momentos especiales ❤️
+  </p>
+
+  <div class="option">
+
+    <input
+      id="fotoArchivo"
+      type="file"
+      accept="image/*">
+
+    <input
+      id="fotoDescripcion"
+      type="text"
+      placeholder="Describe este recuerdo...">
+
+    <button id="subirFoto">
+      📸 Guardar foto
+    </button>
+
+    <div id="fotoMensaje"></div>
+
+  </div>
+
+  <div id="listaFotos">
+    <div class="empty">
+      Todavía no hay fotos. ❤️
+    </div>
+  </div>
+
+</div>
 <button
 id="cerrarSesion"
 class="logout">
@@ -1056,7 +1092,11 @@ document
 document
 .getElementById("diario")
 .classList.remove("hidden");
+document
+.getElementById("fotos")
+.classList.remove("hidden");
 
+await cargarFotos();
 document
 .getElementById("codigo")
 .textContent =
@@ -1339,7 +1379,206 @@ return String(text)
 
 }
 
+/* =========================================
+   FOTOS Y RECUERDOS
+========================================= */
 
+const fotosSeccion = document.getElementById("fotos");
+const fotoArchivo = document.getElementById("fotoArchivo");
+const fotoDescripcion = document.getElementById("fotoDescripcion");
+const subirFoto = document.getElementById("subirFoto");
+const fotoMensaje = document.getElementById("fotoMensaje");
+const listaFotos = document.getElementById("listaFotos");
+
+
+async function cargarFotos(){
+
+  if(!pareja){
+    return;
+  }
+
+  listaFotos.innerHTML =
+    '<div class="empty">Cargando fotos... ❤️</div>';
+
+  try{
+
+    const { data, error } =
+      await supabase
+        .from("couple_photos")
+        .select("*")
+        .eq("couple_id", pareja.id)
+        .order("created_at", { ascending:false });
+
+    if(error){
+      throw error;
+    }
+
+    if(!data || data.length === 0){
+
+      listaFotos.innerHTML =
+        '<div class="empty">Todavía no hay fotos. ❤️</div>';
+
+      return;
+    }
+
+    listaFotos.innerHTML = "";
+
+    data.forEach(foto => {
+
+      const elemento =
+        document.createElement("div");
+
+      elemento.className = "post";
+
+      elemento.innerHTML = `
+        <img
+          src="${foto.url}"
+          alt="Recuerdo"
+          style="
+            width:100%;
+            border-radius:15px;
+            display:block;
+          "
+        >
+
+        <p class="post-body">
+          ${escapeHTML(foto.description || "")}
+        </p>
+
+        <div class="post-info">
+          ❤️ ${new Date(foto.created_at).toLocaleString("es-EC")}
+        </div>
+      `;
+
+      listaFotos.appendChild(elemento);
+
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    listaFotos.innerHTML =
+      '<div class="message error">No se pudieron cargar las fotos: '
+      + escapeHTML(error.message)
+      + '</div>';
+  }
+}
+
+
+subirFoto.addEventListener("click", async()=>{
+
+  const archivo = fotoArchivo.files[0];
+  const descripcion =
+    fotoDescripcion.value.trim();
+
+  fotoMensaje.className = "";
+
+  if(!archivo){
+
+    fotoMensaje.className = "error";
+    fotoMensaje.textContent =
+      "Selecciona una foto primero.";
+
+    return;
+  }
+
+  if(!pareja){
+
+    fotoMensaje.className = "error";
+    fotoMensaje.textContent =
+      "Primero debes estar conectado con tu pareja.";
+
+    return;
+  }
+
+  subirFoto.disabled = true;
+  subirFoto.textContent = "Subiendo...";
+
+
+  try{
+
+    const extension =
+      archivo.name.split(".").pop();
+
+    const nombreArchivo =
+      `${pareja.id}/${crypto.randomUUID()}.${extension}`;
+
+
+    const subida =
+      await supabase.storage
+        .from("couple-photos")
+        .upload(
+          nombreArchivo,
+          archivo,
+          {
+            cacheControl:"3600",
+            upsert:false
+          }
+        );
+
+
+    if(subida.error){
+      throw subida.error;
+    }
+
+
+    const url =
+      supabase.storage
+        .from("couple-photos")
+        .getPublicUrl(nombreArchivo);
+
+
+    const guardado =
+      await supabase
+        .from("couple_photos")
+        .insert({
+
+          couple_id:pareja.id,
+
+          author_id:usuario.id,
+
+          url:url.data.publicUrl,
+
+          description:descripcion
+
+        });
+
+
+    if(guardado.error){
+      throw guardado.error;
+    }
+
+
+    fotoArchivo.value = "";
+    fotoDescripcion.value = "";
+
+    fotoMensaje.className = "success";
+    fotoMensaje.textContent =
+      "¡Foto guardada! ❤️";
+
+
+    await cargarFotos();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    fotoMensaje.className = "error";
+
+    fotoMensaje.textContent =
+      "ERROR: " + error.message;
+
+  }finally{
+
+    subirFoto.disabled = false;
+    subirFoto.textContent =
+      "📸 Guardar foto";
+
+  }
+
+});
 /* =========================================
    CERRAR SESIÓN
 ========================================= */
